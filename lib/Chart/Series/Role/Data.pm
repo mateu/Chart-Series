@@ -1,5 +1,5 @@
 use strictures 1;
-package Chart::Series::Data;
+package Chart::Series::Role::Data;
 use Moose::Role;
 use namespace::autoclean;
 use List::Util qw/ min max /;
@@ -13,12 +13,6 @@ use Data::Dumper::Concise;
 =head2 plot_data
 
 ArrayRef[ArrayRef[Num]] series (rows) of data to be plotted
-
-=head2 title_text
-
-The text to title the chart with.
-
-    Default: Temperature Forecast
 
 =cut
 

@@ -4,8 +4,6 @@ use Moose::Role;
 use Graphics::Color::RGB;
 use Chart::Clicker::Drawing::ColorAllocator;
 
-#requires('number_of_series');
-
 has 'plot_colors' => (
     is       => 'rw',
     isa      => 'ArrayRef[Graphics::Color::RGB]',

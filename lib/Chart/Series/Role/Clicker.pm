@@ -13,23 +13,9 @@ use Number::Format;
 use List::Util qw/ min max /;
 use Path::Class qw/ file /;
 
-with('Chart::Series::Data');
-
-#requires('number_of_datum', 'number_of_series', 'min_range_padded', 'max_range_padded');
+with('Chart::Series::Role::Data');
 
 use Data::Dumper::Concise;
-
-=head1 Synopsis
-
-    my $plot_data = [ 
-        [37, 28, 17, 22, 28],
-        [18, 14,  5, 10, 18],
-    ];
-    
-    my $forecast = Chart::Weather::Forecast->new(
-        plot_data => $plot_data,
-    );
-    $forecast->create_chart;
 
 =head1 Attributes
 
@@ -65,14 +51,6 @@ The text to title the chart with.
 
 =cut
 
-has 'title_text' => (
-    is        => 'rw',
-    isa       => 'Str',
-    'default' => sub {
-        my $self = shift;
-        return $self->number_of_datum . ' point Forecast';
-    },
-);
 has 'chart_file' => (
     is        => 'ro',
     isa       => 'Path::Class::File',
@@ -95,6 +73,14 @@ has 'chart_height' => (
     is      => 'ro',
     isa     => 'Int',
     default => 160,
+);
+has 'title_text' => (
+    is        => 'rw',
+    isa       => 'Str',
+    'default' => sub {
+        my $self = shift;
+        return $self->number_of_datum . ' point series';
+    },
 );
 
 has 'number_formatter' => (
