@@ -3,6 +3,7 @@ package Chart::Series;
 use Moose;
 use namespace::autoclean;
 use Chart::Clicker;
+use Chart::Clicker::Decoration::Legend::Tabular;
 
 with(
     'Chart::Series::Role::Clicker', 
@@ -33,9 +34,9 @@ sub create_chart {
     my $self = shift;
 
     foreach my $index (0..$self->number_of_series-1) {
-        my $points = $self->plot_data->[$index];
+        my %series_data = %{$self->plot_data->[$index]};
         my $color  = $self->plot_colors->[$index];
-        $self->dataset->add_to_series( $self->make_series($points) );
+        $self->dataset->add_to_series( $self->make_series(%series_data) );
         $self->color_allocator->add_to_colors( $color);
     }
 
@@ -90,12 +91,14 @@ sub _build_chart {
     # Title
     $chart->title->text( $self->title_text );
     $chart->title->font( $self->title_font );
-
+    
     # Tufte influenced customizations (maximize data-to-ink)
     $chart->grid_over(1);
+    $chart->legend->visible(1);
+    $chart->legend->border->width(0);
+    $chart->legend_position('south');
     $chart->plot->grid->show_range(0);
     $chart->plot->grid->show_domain(0);
-    $chart->legend->visible(0);
     $chart->border->width(0);
 
     return $chart;
