@@ -145,6 +145,7 @@ sub constant_series {
         Chart::Clicker::Data::Series->new(
             keys =>  $self->x_values,
             values => [ ($height) x $self->number_of_datum ],
+            name => '',
         );
 }
 
@@ -155,12 +156,15 @@ Given a list of points, return a Chart Clicker Data Series
 =cut
 
 sub make_series {
-    my ($self, $data_points) = @_;
+    my ($self, %options) = @_;
 
-    return Chart::Clicker::Data::Series->new(
-        keys   => $self->x_values,
-        values => $data_points,
+    my %constructor_args = (
+        'values' => $options{data},
     );
+    $constructor_args{'keys'} = $options{'keys'}||$self->x_values;
+    $constructor_args{name}   = $options{name} if $options{name};
+
+    return Chart::Clicker::Data::Series->new(%constructor_args);
 }
 
 1

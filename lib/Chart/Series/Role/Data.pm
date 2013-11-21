@@ -18,7 +18,7 @@ ArrayRef[ArrayRef[Num]] series (rows) of data to be plotted
 
 has 'plot_data' => (
     is       => 'rw',
-    isa      => 'ArrayRef[ArrayRef[Num]]',
+    isa      => 'ArrayRef[HashRef]',
     required => 1,
 );
 has 'min_range' => (
@@ -73,9 +73,9 @@ has 'x_values' => (
 # Compute the max and min values for the y-axis (range).
 sub _compute_range {
     my $self = shift;
-    my @mins = map { min @{$_} } @{$self->plot_data};
+    my @mins = map { min @{$_->{data}} } @{$self->plot_data};
     my $global_min = min @mins;
-    my @maxes = map { max @{$_} } @{$self->plot_data};
+    my @maxes = map { max @{$_->{data}} } @{$self->plot_data};
     my $global_max = max @maxes;
 
     # WOTE: Find nearest factor of 10 above and below
@@ -138,10 +138,10 @@ sub _build_number_of_datum {
     my $self = shift;
 
     my $data = $self->plot_data;
-    die "No data provided!" if (not defined $data->[0]->[0]);
+    die "No data provided!" if (not defined $data->[0]->{data}->[0]);
     my $series_size;
     foreach my $series (@{$data}) {
-        my $size = scalar @{$series};
+        my $size = scalar @{$series->{data}};
         if ((defined $series_size) and ($size != $series_size)) {
             die "ERROR:  You have two series with different sizes: $size vs. $series_size\n";
         }
